@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>তোমাকে না বলা কথাগুলো — Sam & Mim</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body class="story-page">
+  <header class="top-bar">
+    <div class="brand">
+      <span class="brand-heart">❤️</span>
+      <span>তোমাকে না বলা কথাগুলো</span>
+    </div>
+
+    <nav class="nav-actions">
+      <a href="/story.html" class="btn-ghost active-nav">🎬 দৃশ্যপট (3D)</a>
+      <a href="/chat.html" class="btn-gradient">💬 চ্যাট অপশন</a>
+      <button id="logout-btn" type="button" class="btn-danger-outline">লগআউট</button>
+    </nav>
+  </header>
+
+  <main id="scene-container" aria-label="3D Story Stage"></main>
+
+  <!-- অ্যানিমেশন চলাকালীন সাবটাইটেল, নিচে যাওয়া আর্কাইভ ও নিয়ন্ত্রণ প্যানেল -->
+  <section id="story-hud" class="story-hud">
+    <div id="caption-box" class="caption-box">
+      শুভ জন্মদিন, মিম। আজকে তোমার জন্মদিনে তোমাকে জানাই অনেক অনেক শুভেচ্ছা...
+    </div>
+
+    <div id="scene-archived-list" class="scene-archived-list" aria-label="পড়া শেষ হওয়া লাইনসমূহ"></div>
+
+    <div class="hud-controls">
+      <button id="start-story-btn" type="button" class="btn-gradient">▶ গল্পটি শুরু করুন</button>
+      <button id="pause-resume-story-btn" type="button" class="btn-ghost" style="display: none;">⏸ বিরতি</button>
+      <button id="toggle-tts-btn" type="button" class="btn-ghost">🗣️ কণ্ঠস্বর চালু</button>
+      <button id="toggle-sound-btn" type="button" class="btn-ghost" style="display: none;">🔊 অডিও চালু</button>
+      <button id="open-letter-now-btn" type="button" class="btn-ghost">💌 চিঠি দেখুন</button>
+    </div>
+  </section>
+
+  <!-- দৃশ্য শেষে বা যেকোনো সময় চিঠির মোডাল -->
+  <div id="final-letter-modal" class="letter-overlay" style="display: none;">
+    <div class="letter-card">
+      <div class="letter-header">
+        <div>
+          <span class="letter-title">💌 মিমের জন্য একটি চিঠি</span>
+          <span class="letter-tag">শুধুমাত্র আজকের দিনের জন্য</span>
+        </div>
+        <button id="close-letter-btn" type="button" class="btn-ghost small-btn">✕ বন্ধ</button>
+      </div>
+
+      <!-- ওপরে ভেসে ওঠা স্পটলাইট লাইন -->
+      <div id="letter-spotlight" class="letter-spotlight"></div>
+
+      <!-- সম্পূর্ণ মূল চিঠি -->
+      <div id="letter-content" class="letter-body"></div>
+
+      <!-- নিচে চলে যাওয়া পঠিত লাইনের তালিকা -->
+      <div id="letter-archived-list" class="letter-archived-list" aria-label="চিঠির পঠিত লাইনসমূহ"></div>
+
+      <div class="letter-footer">
+        <a href="/chat.html" class="btn-gradient">💬 চ্যাট অপশনে গিয়ে কথা বলুন</a>
+        <button id="replay-story-btn" type="button" class="btn-ghost">🔄 দৃশ্যটি আবার দেখুন</button>
+      </div>
+    </div>
+  </div>
+
+  <video id="voice-video" playsinline style="display: none;"></video>
+
+  <script src="/script.js"></script>
+  <script src="/story.js"></script>
+</body>
+</html>

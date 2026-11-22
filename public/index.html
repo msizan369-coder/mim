@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>প্রবেশ করুন — না বলা কথাগুলো</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body class="login-body">
+  <div class="bg-orb orb-rose"></div>
+  <div class="bg-orb orb-violet"></div>
+  <div class="bg-orb orb-cyan"></div>
+
+  <main class="login-shell">
+    <section class="login-card">
+      <div class="login-pill">✨ শুধুমাত্র আজকের দিনের জন্য সক্রিয়</div>
+      <h1 class="login-title">না বলা কথাগুলো</h1>
+      <p class="login-subtitle">ভেতরে প্রবেশ করতে আপনার নির্ধারিত ইউজারনেম ও পাসওয়ার্ড দিন</p>
+
+      <form id="login-form" class="login-form" novalidate>
+        <div class="input-group">
+          <label for="username">ইউজারনেম</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="আপনার ইউজারনেম লিখুন..."
+            required
+            autocomplete="username"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="password">পাসওয়ার্ড</label>
+          <div class="password-wrap">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="••••••••"
+              required
+              autocomplete="current-password"
+            />
+            <button type="button" id="toggle-pass-btn" class="eye-toggle-btn" title="পাসওয়ার্ড দেখুন/লুকান">
+              👁
+            </button>
+          </div>
+        </div>
+
+        <div id="login-error" class="login-error" role="alert" style="display: none;"></div>
+
+        <button type="submit" id="login-submit-btn" class="btn-gradient full-width">
+          প্রবেশ করুন ➔
+        </button>
+      </form>
+
+      <div class="login-footnote">
+        <span>সেশন <strong>localStorage</strong>-এ সংরক্ষিত থাকবে, যাতে অযথা লগআউট না হয়।</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="/script.js"></script>
+  <script>
+    (() => {
+      const existingUser = window.AppAuth.getUser();
+      if (existingUser && existingUser.username) {
+        const target = existingUser.username === 'sam' ? '/chat.html' : '/story.html';
+        window.location.replace(target);
+        return;
+      }
+
+      const loginForm = document.getElementById('login-form');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const togglePassBtn = document.getElementById('toggle-pass-btn');
+      const errorBox = document.getElementById('login-error');
+      const submitBtn = document.getElementById('login-submit-btn');
+
+      togglePassBtn.addEventListener('click', () => {
+        const isPass = passwordInput.type === 'password';
+        passwordInput.type = isPass ? 'text' : 'password';
+        togglePassBtn.textContent = isPass ? '🙈' : '👁';
+      });
+
+      function showError(msg) {
+        errorBox.textContent = msg;
+        errorBox.style.display = 'block';
+      }
+
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorBox.style.display = 'none';
+        errorBox.textContent = '';
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+
+        if (!username || !password) {
+          showError('দয়া করে ইউজারনেম এবং পাসওয়ার্ড লিখুন।');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'যাচাই করা হচ্ছে...';
+
+        try {
+          const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+
+          const data = await res.json();
+          if (!res.ok || !data.success || !data.user) {
+            showError(data.message || 'লগইন ব্যর্থ হয়েছে।');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            return;
+          }
+
+          window.AppAuth.setUser(data.user);
+          window.location.href = data.user.redirectTo || '/story.html';
+        } catch (_err) {
+          showError('সার্ভারের সাথে সংযোগ স্থাপন করা যাচ্ছে না।');
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

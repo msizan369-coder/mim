@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>চ্যাট — Sam & Mim</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body class="chat-page">
+  <header class="top-bar">
+    <div class="chat-header-profile">
+      <div class="avatar-circle" id="partner-avatar">M</div>
+      <div class="partner-info">
+        <div class="partner-name" id="partner-name">Mim</div>
+        <div class="partner-status" id="partner-status">তোমাকে না বলা কথাগুলো আজ বলবো</div>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- শুধুমাত্র Sam লগইন করলে এই পোস্ট মোড প্যানেলটি সুন্দরভাবে দৃশ্যমান হবে -->
+      <div id="sam-role-switcher" class="role-switcher" style="display: none;">
+        <span class="role-switcher-badge">পোস্ট মোড</span>
+        <select id="active-sender-select" aria-label="পোস্ট মোড নির্বাচন করুন">
+          <option value="sam">Sam হিসেবে</option>
+          <option value="mim">Mim হিসেবে</option>
+        </select>
+      </div>
+
+      <a href="/story.html" class="btn-ghost">🏠 হোমপেজ</a>
+      <button id="logout-btn" type="button" class="btn-danger-outline">লগআউট</button>
+    </div>
+  </header>
+
+  <main class="chat-wrapper">
+    <div class="chat-subbar">
+      <span class="ephemeral-note">⏳ এই পেজটি শুধুমাত্র আজকের দিনের জন্য সক্রিয় থাকবে</span>
+      <div class="subbar-right">
+        <span id="active-mode-indicator" class="active-mode-pill" style="display: none;"></span>
+        <span id="upload-progress-text" class="upload-progress-text"></span>
+      </div>
+    </div>
+
+    <div id="messages-list" class="messages-list" aria-live="polite"></div>
+
+    <!-- ভয়েস রেকর্ডিং নিয়ন্ত্রণ (থামান / চালিয়ে যান / রেকর্ড শেষ / বাতিল) ও প্রিভিউ প্যানেল -->
+    <div id="voice-panel" class="voice-panel" style="display: none;">
+      <div id="recording-indicator" class="rec-indicator" style="display: none;">
+        <span class="rec-dot"></span>
+        <span id="rec-state-label">ভয়েস রেকর্ড হচ্ছে...</span>
+        <strong id="rec-timer">00:00</strong>
+        <button type="button" id="pause-resume-rec-btn" class="btn-small">⏸ থামান</button>
+        <button type="button" id="stop-rec-btn" class="btn-small">⏹ রেকর্ড শেষ</button>
+        <button type="button" id="cancel-rec-btn" class="btn-danger-small">✖ বাতিল</button>
+      </div>
+
+      <div id="voice-preview-box" class="voice-preview-box" style="display: none;">
+        <audio id="voice-preview-audio" controls></audio>
+        <button type="button" id="send-voice-btn" class="btn-gradient">✔ ভয়েস পাঠান</button>
+        <button type="button" id="discard-voice-btn" class="btn-danger-small">🗑 মুছে ফেলুন</button>
+      </div>
+    </div>
+
+    <form id="message-form" class="composer">
+      <input
+        type="file"
+        id="media-input"
+        accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.zip,.txt"
+        style="display: none;"
+      />
+      <button type="button" id="attach-btn" class="icon-btn" title="ছবি, ভিডিও, অডিও বা ফাইল আপলোড">📎</button>
+      <button type="button" id="start-rec-btn" class="icon-btn" title="ভয়েস রেকর্ড করুন">🎤</button>
+      <input
+        type="text"
+        id="message-input"
+        placeholder="আপনার মনের কথা লিখুন..."
+        autocomplete="off"
+      />
+      <button type="submit" class="btn-gradient">পাঠান ➤</button>
+    </form>
+  </main>
+
+  <script src="/script.js"></script>
+  <script src="/chat.js"></script>
+</body>
+</html>

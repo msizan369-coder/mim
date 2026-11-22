@@ -1,0 +1,24 @@
+{
+  "name": "valobashar-golpo-pro",
+  "version": "5.0.0",
+  "description": "Advanced 3D Romantic Story and Real-time Socket.io Chat System for Sam and Mim",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "threejs",
+    "socketio",
+    "express",
+    "multer",
+    "bangla-web-app"
+  ],
+  "author": "Sam & Mim Project",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.7.2"
+  }
+}
